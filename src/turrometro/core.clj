@@ -1,30 +1,47 @@
 (ns turrometro.core
   (:require [clojure.java.io :as io]
-            [clojure.string :as str]
             [jutsu.core :as j]))
 
-(def data-file (io/resource "chat.txt"))
-(def msg-list (line-seq (io/reader data-file)))
+(def FILE_NAME "chat.txt")
 
 (defn capture-name
   "Gets the name from the string passed as parameter. This string is
-  supposed to contain name + message in a specific format (see regex)"
+  supposed to contain name + message in a specific format (see regex).
+
+  The second element is taken because the first one is the full match
+  and the second is the first capturing group (the name)"
   [line]
   (second (re-find #"\d{2}\/\d{2}\/\d{4}, \d{2}:\d{2} - (.*?):" line)))
 
-(println "\n\n")
+(defn calc-freqs
+  "Get a sorted map the names and messages of everyone in the
+  conversation"
+  []
+  (let [data-file (io/resource FILE_NAME)
+        msg-list (line-seq (io/reader data-file))]
+    (sort-by val > (frequencies (map capture-name msg-list)))))
 
-(println
- (frequencies (map capture-name msg-list)))
+(defn plot-bar-graph
+  "Starts the server and creates the plot"
+  [freqs]
+  (j/start-jutsu!)
 
-(j/graph! "Bar Chart"
-          [{:x ["foo" "bar" "foobar"]
-            :y [20 30 40]
-            :type "bar"}])
+  ;; doc says Jutsu needs some time...
+  (Thread/sleep 3000)
 
-(j/start-jutsu!)
-
+  ;; Parameters for j/graph! are ID, data and layout
+  (j/graph! "Turrometro"
+            [{:x (keys freqs)
+              :y (vals freqs)
+              :type "bar"}]
+            ;; layout
+            {:xaxis {:title "Names"}
+             :yaxis {:title "# of messages"}
+             :title "# of messages / people"
+             :paper_bgcolor "#eee"
+             :plot_bgcolor "#eee"
+             :margin {:b 140}}))
 
 
 (defn -main []
-  (println (line-seq data-file)))
+  (plot-bar-graph (calc-freqs)))
