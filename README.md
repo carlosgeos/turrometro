@@ -1,7 +1,7 @@
 # Turrometro
 
 
-What is turra ? -> [NON PLVS TVRRA !](https://www.youtube.com/watch?v=9-4r1ngCPZ8)
+[NON PLVS TVRRA !](https://twitter.com/vidamodernaoml/status/872453108856635392?lang=en)
 
 
 ## Usage
@@ -12,3 +12,5 @@ folder and:
 ```
 lein run
 ```
+
+![Turrometro en acción](images/turrometro.png)

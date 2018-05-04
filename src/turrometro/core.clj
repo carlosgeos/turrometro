@@ -14,7 +14,7 @@
   (second (re-find #"\d{2}\/\d{2}\/\d{4}, \d{2}:\d{2} - (.*?):" line)))
 
 (defn calc-freqs
-  "Get a sorted map the names and messages of everyone in the
+  "Get a sorted map with the names and messages of everyone in the
   conversation"
   []
   (let [data-file (io/resource FILE_NAME)
