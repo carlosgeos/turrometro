@@ -1,8 +1,11 @@
 (ns turrometro.core
-  (:require [clojure.java.io :as io]
-            [jutsu.core :as j]))
+  (:require [clojure.java.io :as io])
+  (:use [plotly-clj.core]))
+
+(offline-init)
 
 (def FILE_NAME "chat.txt")
+(def OUT_GRAPH_FILE_NAME "turrometro.html")
 
 (defn capture-name
   "Gets the name from the string passed as parameter. This string is
@@ -22,25 +25,20 @@
     (sort-by val > (frequencies (map capture-name msg-list)))))
 
 (defn plot-bar-graph
-  "Starts the server and creates the plot"
+  "Creates the plot in an .html file and saves it"
   [freqs]
-  (j/start-jutsu!)
-
-  ;; doc says Jutsu needs some time...
-  (Thread/sleep 3000)
-
-  ;; Parameters for j/graph! are ID, data and layout
-  (j/graph! "Turrometro"
-            [{:x (keys freqs)
-              :y (vals freqs)
-              :type "bar"}]
-            ;; layout
-            {:xaxis {:title "Names"}
-             :yaxis {:title "# of messages"}
-             :title "# of messages / people"
-             :paper_bgcolor "#eee"
-             :plot_bgcolor "#eee"
-             :margin {:b 140}}))
+  (-> (plotly {:x (keys freqs)})
+      (add-bar
+       :x :x
+       :y (vals freqs)
+       :name "names / # messages")
+      (set-layout :title "Turrometro"
+                  :xaxis {:title "Names"}
+                  :yaxis {:title "# of messages"}
+                  :paper_bgcolor "#eee"
+                  :plot_bgcolor "#eee"
+                  :margin {:b 140})
+      (save-html OUT_GRAPH_FILE_NAME)))
 
 
 (defn -main []

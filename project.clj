@@ -6,4 +6,4 @@
   :main turrometro.core
   :profiles {:uberjar {:aot [turrometro.core]}}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [hswick/jutsu "0.1.2"]])
+                 [plotly-clj "0.1.1"]])

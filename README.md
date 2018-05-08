@@ -13,4 +13,6 @@ folder and:
 lein run
 ```
 
+The results should be saved in `turrometro.html` (plot.ly).
+
 ![Turrometro en acción](images/turrometro.png)
