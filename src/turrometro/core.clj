@@ -14,7 +14,7 @@
   The second element is taken because the first one is the full match
   and the second is the first capturing group (the name)"
   [line]
-  (second (re-find #"\d{2}\/\d{2}\/\d{4}, \d{2}:\d{2} - (.*?):" line)))
+  (second (re-find #"\d\d?\/\d\d?\/\d\d, \d{2}:\d{2} - (.*?):" line)))
 
 (defn calc-freqs
   "Get a sorted map with the names and messages of everyone in the
@@ -39,7 +39,6 @@
                   :plot_bgcolor "#eee"
                   :margin {:b 140})
       (save-html OUT_GRAPH_FILE_NAME)))
-
 
 (defn -main []
   (plot-bar-graph (calc-freqs)))
